@@ -1,4 +1,5 @@
 <script src="../../server/app.js"></script>
+<!--<link href="iconfont.css">-->
 <!--<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>-->
 <!--<link rel="stylesheet" href="demo.css">-->
 <!--<link rel="stylesheet" href="iconfont.css">-->
@@ -6,6 +7,11 @@
     <div id="app" class="app">
         <div class="head_body">
             <p><span>当前位置：</span>长宁区新靖镇临虹路空..<a>[切换地址]</a></p>
+        </div>
+        <div class="head_body1">
+            <p>
+
+            </p>
         </div>
         <ul>
             <li v-for="(item,key) in eleme" >
@@ -26,7 +32,8 @@
         return {
           key: 1,
           value5: 4,
-          eleme: []
+          eleme: [],
+          ele:[]
         }
     },
     methods: {
@@ -41,6 +48,21 @@
         }
       },
 
+//      remove(entry){
+//        this.eleme.forEach(function(item,index) {
+//          if(item.name ==entry.name){
+//            this.eleme.splice(index,1)
+//          }
+//        })
+//      }
+            //=>不会把this弄丢失，而function会把this指向window，（全局）
+      shaixuan(entry){
+        this.eleme.forEach((item,index)=>{
+          if (index>=10){
+            this.pop()
+          }
+        })
+      },
       remove(entry){
         this.eleme.forEach((item,index) => {
           if(item.name ==entry.name){

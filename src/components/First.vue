@@ -1,20 +1,19 @@
 <script src="../../server/app.js"></script>
-<!--<link href="iconfont.css">-->
 <!--<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.js"></script>-->
 <!--<link rel="stylesheet" href="demo.css">-->
 <!--<link rel="stylesheet" href="iconfont.css">-->
 <template>
     <div id="app" class="app">
         <div class="head_body">
-            <p><span>当前位置：</span>长宁区新靖镇临虹路空..<a>[切换地址]</a></p>
+            <p><span >当前位置：</span>长宁区新靖镇临虹路空..<a>[切换地址]</a></p>
         </div>
-        <div class="head_body1">
-            <p>
 
-            </p>
-        </div>
-        <ul>
-            <li v-for="(item,key) in eleme" >
+        <test ref="mytest" :msg="123456789"></test>
+
+        <button @click="getMytest">getMytest</button>
+
+        <ul v-if="curpage" >
+            <li v-for="(item,key) in arrShow">
                 <div class="picture" @click="remove(item)"><img src="../assets/zgf.png"></div>
                 <a class="first_name" v-bind:href="item.id">{{item.name}}</a>
                 <p class="yueshou">月售351单</p>
@@ -23,58 +22,82 @@
                 </div>
             </li>
         </ul>
+        <button @click="addyuansu()">121111</button>
+
     </div>
 </template>
 
 <script>
+  import Test from './Test.vue'
   export default {
+    components:{
+      Test
+    },
     data () {
-        return {
-          key: 1,
-          value5: 4,
-          eleme: [],
-          ele:[]
-        }
+      return {
+        key: 1,
+        value5: 4,
+        eleme: [],
+        arrShow: [],
+        curpage: 1
+      }
     },
     methods: {
-      async getMenuList() {
+
+      getMytest(){
+
+        console.log(this.$refs.mytest)
+      },
+      async getMenuList () {
         try {
           let res = await this.$http.get('/api/eleme.json')
-          console.log(res.data)
           this.eleme = res.data
         } catch (err) {
           console.log('err', err)
 //          console.log(piecewise_agent_fee.tips)
         }
       },
+      addyuansu () {
+        if (this.arrShow.length === this.eleme.length) {
+          return
+        }
 
-//      remove(entry){
-//        this.eleme.forEach(function(item,index) {
-//          if(item.name ==entry.name){
-//            this.eleme.splice(index,1)
-//          }
-//        })
-//      }
-            //=>不会把this弄丢失，而function会把this指向window，（全局）
-      shaixuan(entry){
-        this.eleme.forEach((item,index)=>{
-          if (index>=10){
-            this.pop()
+        let index = this.curpage * 10 - 10
+        let endIndex = index + 10
+        for(index; index < this.eleme.length; index++) {
+//         this.arrShow.push(this.eleme[index])
+          this.arrShow.push(this.eleme[index])
+          if (index === endIndex) {
+            break
           }
-        })
+
+
+        }
+//       this.arrShow.push(this.eleme[endIndex + 1])
+        this.curpage++
+//       console.log(this.arrShow)
+        console.log(this.eleme)
+//       if (this.eleme.length>10){
+//         for (let i=0;i<10;i++){
+//            this.eleme[i]=this.ele[i];
+//         }
+//       }
       },
+
       remove(entry){
+        //
         this.eleme.forEach((item,index) => {
           if(item.name ==entry.name){
             this.eleme.splice(index,1)
           }
         })
       }
-
-
     },
     mounted() {
-      this.getMenuList()
+//      console.log(21123)
+      this.getMenuList().then(() => {
+        this.addyuansu()
+      })
     },
 
     created(){
